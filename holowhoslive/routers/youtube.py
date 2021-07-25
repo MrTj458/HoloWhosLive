@@ -15,7 +15,10 @@ router = APIRouter(
 
 
 @router.get('/')
-async def get_youtube_info(r=Depends(get_redis), db: Session = Depends(get_db), service=Depends(get_yt_service)):
+async def get_youtube_data(r=Depends(get_redis), db: Session = Depends(get_db), service=Depends(get_yt_service)):
+    """
+    Get all of the youtube channel and video data from the Youtube api.
+    """
     # Check for and return cached data if it exists
     cached_data = r.get('cached_data')
     if cached_data:
@@ -78,27 +81,45 @@ async def get_youtube_info(r=Depends(get_redis), db: Session = Depends(get_db), 
 
 @router.get('/all')
 async def get_all_live(r=Depends(get_redis)):
+    """
+    # DEBUG ONLY
+    Get all data with all channels live
+    """
     return json.loads(r.get('all_live'))
 
 
 @router.get('/some')
 async def get_all_live(r=Depends(get_redis)):
+    """
+    # DEBUG ONLY
+    Get all data with half of the channels live
+    """
     return json.loads(r.get('some_live'))
 
 
 @router.get('/none')
 async def get_all_live(r=Depends(get_redis)):
+    """
+    # DEBUG ONLY
+    Get all data with no channels live
+    """
     return json.loads(r.get('all_offline'))
 
 
 @router.get('/channels', response_model=List[ChannelSchema])
 async def get_saved_channels(db: Session = Depends(get_db)):
+    """
+    Get all of the saved channels that will be searched for in the Youtube api.
+    """
     channels = db.query(Channel).all()
     return channels
 
 
 @router.post('/channels', response_model=ChannelSchema)
 async def create_saved_channel(channel: ChannelCreateSchema, db: Session = Depends(get_db)):
+    """
+    Add a new channel to be searched for in the Youtube api.
+    """
     db_channel = Channel(**channel.dict())
     db.add(db_channel)
     db.commit()

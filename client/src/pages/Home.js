@@ -6,6 +6,8 @@ import { YoutubeContext } from '../context/ChannelContext'
 
 const HomeContainer = styled.div`
   text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
 
   h1 {
     text-align: center;
@@ -23,8 +25,6 @@ export default function Home() {
 
   return (
     <HomeContainer>
-      <h1>Holo Who's live</h1>
-
       {ytData.length > 0 ? <ChannelList channels={ytData} /> : <Spinner />}
     </HomeContainer>
   )
