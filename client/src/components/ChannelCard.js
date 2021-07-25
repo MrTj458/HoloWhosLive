@@ -51,7 +51,6 @@ export default function ChannelCard({ channel }) {
   const liveVideo = channel.videos.find(
     (video) => video.live_broadcast_content === 'live'
   )
-  console.log(liveVideo)
 
   return (
     <Card live={channel.is_live}>

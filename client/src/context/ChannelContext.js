@@ -11,7 +11,7 @@ export default function ChannelContext({ children }) {
   }, [])
 
   const fetchData = async () => {
-    const res = await axios.get('/api/youtube')
+    const res = await axios.get('/api/youtube/some')
     setChannelData(res.data)
   }
 

@@ -71,9 +71,24 @@ async def get_youtube_info(r=Depends(get_redis), db: Session = Depends(get_db), 
         response_data.append(channel_data)
 
     # Cache result
-    r.setex('cached_data', '900', json.dumps(response_data))
+    r.setex('cached_data', '3600', json.dumps(response_data))
 
     return response_data
+
+
+@router.get('/all')
+async def get_all_live(r=Depends(get_redis)):
+    return json.loads(r.get('all_live'))
+
+
+@router.get('/some')
+async def get_all_live(r=Depends(get_redis)):
+    return json.loads(r.get('some_live'))
+
+
+@router.get('/none')
+async def get_all_live(r=Depends(get_redis)):
+    return json.loads(r.get('all_offline'))
 
 
 @router.get('/channels', response_model=List[ChannelSchema])
