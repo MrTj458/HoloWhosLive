@@ -1,13 +1,10 @@
 from holowhoslive.config import Settings, get_settings
 from holowhoslive.dependencies.database import engine
 from holowhoslive.models import Base
-import holowhoslive.routers as routers
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
 
-load_dotenv()
-
+from holowhoslive.api import channel_router, user_router
 
 Base.metadata.create_all(bind=engine)
 
@@ -25,8 +22,8 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
-app.include_router(routers.user_router)
-app.include_router(routers.youtube_router)
+app.include_router(user_router)
+app.include_router(channel_router)
 
 
 @app.get("/api")
