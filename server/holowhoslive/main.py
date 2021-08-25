@@ -1,7 +1,8 @@
+from holowhoslive.config import Settings, get_settings
 from holowhoslive.dependencies.database import engine
 from holowhoslive.models import Base
 import holowhoslive.routers as routers
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
@@ -29,5 +30,5 @@ app.include_router(routers.youtube_router)
 
 
 @app.get("/api")
-async def root():
-    return {"message": "Holo Who's Live API"}
+async def root(settings: Settings = Depends(get_settings)):
+    return settings

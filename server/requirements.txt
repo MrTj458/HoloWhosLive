@@ -45,3 +45,4 @@ uvloop==0.15.3
 watchgod==0.7
 websockets==9.1
 wrapt==1.12.1
+psycopg2-binary==2.9.1

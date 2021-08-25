@@ -34,5 +34,35 @@
     "last_name": "",
     "channel_name": "IRyS Ch. hololive-EN",
     "channel_id": "UC8rcEBzJSleTkf_-agPM20g"
+  },
+  {
+    "first_name": "Tsukumo",
+    "last_name": "Sana",
+    "channel_name": "Tsukumo Sana Ch. hololive-EN",
+    "channel_id": "UCsUj0dszADCGbF3gNrQEuSQ"
+  },
+  {
+    "first_name": "Ceres",
+    "last_name": "Fauna",
+    "channel_name": "Ceres Fauna Ch. hololive-EN",
+    "channel_id": "UCO_aKKYxn4tvrqPjcTzZ6EQ"
+  },
+  {
+    "first_name": "Ouro",
+    "last_name": "Kronii",
+    "channel_name": "Ouro Kronii Ch. hololive-EN",
+    "channel_id": "UCmbs8T6MWqUHP1tIQvSgKrg"
+  },
+  {
+    "first_name": "Nanashi",
+    "last_name": "Mumei",
+    "channel_name": "Nanashi Mumei Ch. hololive-EN",
+    "channel_id": "UC3n5uGu18FoCy23ggWWp8tA"
+  },
+  {
+    "first_name": "Hakos",
+    "last_name": "Baelz",
+    "channel_name": "Hakos Baelz Ch. hololive-EN",
+    "channel_id": "UCgmPnx-EEeOrZSg5Tiw7ZRQ"
   }
 ]
