@@ -1,7 +1,7 @@
 from holowhoslive.config import Settings, get_settings
 from holowhoslive.dependencies.database import engine
 from holowhoslive.models import Base
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from holowhoslive.api import channel_router, user_router
@@ -26,6 +26,9 @@ app.include_router(user_router)
 app.include_router(channel_router)
 
 
-@app.get("/api")
-async def root(settings: Settings = Depends(get_settings)):
-    return settings
+@app.get("/")
+async def root(request: Request):
+    return {
+        'msg': "Holo Who's Live API",
+        'docs': f'{request.url.scheme}://{request.url.hostname}:{request.url.port}/docs'
+    }
