@@ -1,7 +1,7 @@
 from holowhoslive.config import Settings, get_settings
 from holowhoslive.dependencies.database import engine
 from holowhoslive.models import Base
-from fastapi import FastAPI, Depends, Request
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from holowhoslive.api import channel_router, user_router
@@ -11,7 +11,7 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 origins = [
-    'http://localhost:3000'
+    'http://localhost:8080',
 ]
 
 app.add_middleware(
