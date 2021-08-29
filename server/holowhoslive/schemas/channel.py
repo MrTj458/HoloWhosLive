@@ -13,6 +13,7 @@ class ChannelBaseSchema(BaseModel):
     last_name: str
     channel_name: str
     channel_id: str
+    group: str
 
 
 class ChannelCreateSchema(ChannelBaseSchema):

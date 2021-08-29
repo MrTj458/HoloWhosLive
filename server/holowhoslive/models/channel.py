@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, Boolean
 
 from holowhoslive.dependencies.database import Base
 
+
 class Channel(Base):
     __tablename__ = 'channels'
 
@@ -10,3 +11,4 @@ class Channel(Base):
     first_name = Column(String, index=True)
     channel_name = Column(String, index=True)
     channel_id = Column(String, unique=True, index=True)
+    group = Column(String, index=True)
