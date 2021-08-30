@@ -11,7 +11,6 @@ class ChannelImageSchema(BaseModel):
 class ChannelBaseSchema(BaseModel):
     first_name: str
     last_name: str
-    channel_name: str
     channel_id: str
     group: str
 
@@ -22,6 +21,7 @@ class ChannelCreateSchema(ChannelBaseSchema):
 
 class ChannelSchema(ChannelBaseSchema):
     id: int
+    channel_name: Optional[str]
     is_live: Optional[bool]
     images: Optional[ChannelImageSchema]
     subscribers: Optional[int]

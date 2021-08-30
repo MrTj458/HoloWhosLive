@@ -8,10 +8,17 @@ from holowhoslive.schemas.channel import ChannelImageSchema, ChannelSchema
 
 def get_yt_data(channels, yt_service):
     channel_ids = [channel.channel_id for channel in channels]
-    yt_request = yt_service.channels().list(
-        id=channel_ids, part='snippet,statistics')
 
-    return yt_request.execute()['items']
+    split_ids = [channel_ids[x:x+50] for x in range(0, len(channel_ids), 50)]
+
+    channel_data = []
+
+    for arr in split_ids:
+        yt_request = yt_service.channels().list(
+            id=arr, part='snippet,statistics')
+        channel_data = [*channel_data, *yt_request.execute()['items']]
+
+    return channel_data
 
 
 def get_is_live(channel_id):
@@ -44,6 +51,7 @@ def fetch_channel_data(db: Session, yt_service) -> List[ChannelSchema]:
                 medium=yt_channel['snippet']['thumbnails']['medium']['url'],
                 high=yt_channel['snippet']['thumbnails']['high']['url'],
             ),
+            channel_name=yt_channel['snippet']['title'],
             subscribers=yt_channel['statistics']['subscriberCount'],
             is_live=get_is_live(channel.channel_id),
         )

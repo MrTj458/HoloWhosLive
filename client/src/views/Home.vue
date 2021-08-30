@@ -1,12 +1,17 @@
 <template>
   <div class="home">
+    <div class="center" v-if="error">
+      <h2>Error connecting to server! Please try again later.</h2>
+    </div>
     <div v-if="!loading">
       <!-- Live Channels -->
-      <div>
+      <div v-if="liveChannels.length > 0">
         <ChannelList :channels="liveChannels" />
+        <hr />
       </div>
-
-      <hr v-if="liveChannels.length" />
+      <div v-else class="center">
+        <h2>No one is live right now 🙁</h2>
+      </div>
 
       <!-- Offline Channels -->
       <div>
@@ -27,7 +32,7 @@ import ChannelList from '@/components/ChannelList'
 import Spinner from '@/components/Spinner'
 
 const { filter } = useFilter()
-const { data: channels, loading } = getChannels()
+const { data: channels, loading, error } = getChannels()
 
 const sortBySubCount = (channels) => {
   return channels.sort((a, b) => b.subscribers - a.subscribers)
@@ -49,4 +54,9 @@ const offlineChannels = computed(() => {
 })
 </script>
 
-<style></style>
+<style scoped>
+.center {
+  margin-top: 30px;
+  text-align: center;
+}
+</style>

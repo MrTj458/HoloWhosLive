@@ -15,6 +15,8 @@
             <option value="All" selected>All</option>
             <option value="English">English</option>
             <option value="Indonesia">Indonesia</option>
+            <option value="Japan">Japan</option>
+            <option value="Holostars">Holostars</option>
           </select>
         </li>
       </div>
