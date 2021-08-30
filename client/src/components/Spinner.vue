@@ -11,7 +11,7 @@
   border-bottom: 5px solid transparent;
   border-radius: 50%;
   animation: spin 1s infinite ease;
-  margin: 0 auto;
+  margin: 20px auto;
 }
 
 @keyframes spin {

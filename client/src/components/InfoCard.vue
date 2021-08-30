@@ -1,13 +1,15 @@
 <template>
-  <a :href="channelUrl">
+  <a :href="channelUrl" class="card">
     <div :class="{ card: true, is_live: props.channel.is_live }">
-      <img :src="props.channel.images.medium" alt="" />
+      <img
+        :src="props.channel.images.medium"
+        :alt="props.channel.channel_name"
+      />
       <div class="card-info">
-        <!-- <h2 v-if="props.channel.is_live" class="live-text">Live Now!</h2> -->
-        <h3 class="card-title">
-          {{ props.channel.first_name }} {{ props.channel.last_name }}
-        </h3>
-        <p>{{ subCount }} subscribers</p>
+        <h2>{{ props.channel.first_name }} {{ props.channel.last_name }}</h2>
+        <p>{{ props.channel.group }}</p>
+        <small>{{ props.channel.channel_name }}</small>
+        <small>{{ subCount }} subscribers</small>
       </div>
     </div>
   </a>
@@ -55,21 +57,15 @@ img {
   cursor: pointer;
 }
 
-.card-title {
-  margin-bottom: 10px;
-}
-
 .card-info {
-  padding-top: 10px;
-  padding-bottom: 15px;
+  padding: 10px;
 }
 
 .is_live {
   border: 4px solid red;
 }
 
-.live-text {
-  color: red;
-  margin-bottom: 5px;
+small {
+  display: block;
 }
 </style>

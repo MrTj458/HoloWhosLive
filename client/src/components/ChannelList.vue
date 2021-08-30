@@ -18,19 +18,27 @@ const props = defineProps(['channels'])
 
 <style scoped>
 .list {
-  margin: 0 auto;
+  margin: 20px auto;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 20px;
+  position: relative;
 }
 
-.channels-enter-from {
+.channels-enter-from,
+.channels-leave-to {
   opacity: 0;
   transform: scale(0.5);
 }
 
-.channels-enter-active {
+.channels-enter-active,
+.channels-move {
+  transition: all 0.3s ease;
+}
+
+.channels-leave-active {
+  position: absolute;
   transition: all 0.3s ease;
 }
 </style>

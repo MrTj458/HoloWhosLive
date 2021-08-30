@@ -1,11 +1,15 @@
 <template>
   <div class="home">
     <div v-if="!loading">
-      <div class="section">
+      <!-- Live Channels -->
+      <div>
         <ChannelList :channels="liveChannels" />
       </div>
-      <hr />
-      <div class="section">
+
+      <hr v-if="liveChannels.length" />
+
+      <!-- Offline Channels -->
+      <div>
         <ChannelList :channels="offlineChannels" />
       </div>
     </div>
@@ -14,35 +18,35 @@
 </template>
 
 <script setup>
-import getChannels from '@/composables/getChannels'
-import ChannelList from '@/components/ChannelList'
-import Spinner from '@/components/Spinner'
 import { computed } from '@vue/reactivity'
 
+import useFilter from '@/composables/useFilter'
+import getChannels from '@/composables/getChannels'
+
+import ChannelList from '@/components/ChannelList'
+import Spinner from '@/components/Spinner'
+
+const { filter } = useFilter()
 const { data: channels, loading } = getChannels()
 
 const sortBySubCount = (channels) => {
   return channels.sort((a, b) => b.subscribers - a.subscribers)
 }
 
+const filteredChannels = computed(() => {
+  if (filter.value === 'All') {
+    return channels.value
+  }
+  return channels.value.filter((c) => c.group === filter.value)
+})
+
 const liveChannels = computed(() => {
-  return sortBySubCount(channels.value.filter((c) => c.is_live))
+  return sortBySubCount(filteredChannels.value.filter((c) => c.is_live))
 })
 
 const offlineChannels = computed(() => {
-  return sortBySubCount(channels.value.filter((c) => !c.is_live))
+  return sortBySubCount(filteredChannels.value.filter((c) => !c.is_live))
 })
 </script>
 
-<style scoped>
-.home {
-  margin: 30px auto;
-  max-width: 1200px;
-}
-
-.section {
-  color: red;
-  text-align: center;
-  margin: 20px;
-}
-</style>
+<style></style>

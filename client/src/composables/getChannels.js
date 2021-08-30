@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import axios from 'axios'
 
 const getChannels = () => {
-  const data = ref([])
+  const data = ref(null)
   const error = ref(null)
   const loading = ref(false)
 
