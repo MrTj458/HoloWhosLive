@@ -19,6 +19,7 @@ const props = defineProps(['channels'])
 <style scoped>
 .list {
   margin: 20px auto;
+  margin-bottom: 60px;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;

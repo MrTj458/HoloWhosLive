@@ -11,7 +11,7 @@
       <div>
         <li>
           Showing:
-          <select @change="changeFilter">
+          <select @change="changeFilter" class="dropdown">
             <option value="All" selected>All</option>
             <option value="English">English</option>
             <option value="Indonesia">Indonesia</option>
@@ -55,5 +55,14 @@ nav ul {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+/* Dropdown */
+.dropdown {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px 20px;
+  background-color: #eee;
+  box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
 }
 </style>

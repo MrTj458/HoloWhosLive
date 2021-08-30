@@ -5,13 +5,14 @@
     </div>
     <div v-if="!loading">
       <!-- Live Channels -->
-      <div v-if="liveChannels.length > 0">
-        <ChannelList :channels="liveChannels" />
-        <hr />
-      </div>
-      <div v-else class="center">
-        <h2>No one is live right now 🙁</h2>
-      </div>
+      <transition name="live" mode="out-in">
+        <div v-if="liveChannels.length > 0">
+          <ChannelList :channels="liveChannels" />
+        </div>
+        <div v-else class="center">
+          <h2>No one is live right now 🙁</h2>
+        </div>
+      </transition>
 
       <!-- Offline Channels -->
       <div>
@@ -58,5 +59,15 @@ const offlineChannels = computed(() => {
 .center {
   margin-top: 30px;
   text-align: center;
+}
+
+.live-enter-from,
+.live-leave-to {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.live-enter-active {
+  transition: all 0.3s ease;
 }
 </style>
