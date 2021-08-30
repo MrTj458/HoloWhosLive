@@ -1,25 +1,29 @@
 <template>
   <div class="home">
-    <div class="center" v-if="error">
+    <div v-if="error" class="center">
       <h2>Error connecting to server! Please try again later.</h2>
     </div>
-    <div v-if="!loading">
-      <!-- Live Channels -->
-      <transition name="live" mode="out-in">
-        <div v-if="liveChannels.length > 0">
-          <ChannelList :channels="liveChannels" />
-        </div>
-        <div v-else class="center">
-          <h2>No one is live right now 🙁</h2>
-        </div>
-      </transition>
+    <div v-else>
+      <div v-if="loading">
+        <Spinner />
+      </div>
+      <div v-else>
+        <!-- Live Channels -->
+        <transition name="live" mode="out-in">
+          <div v-if="liveChannels.length > 0">
+            <ChannelList :channels="liveChannels" />
+          </div>
+          <div v-else class="center">
+            <h2>No one is live right now 🙁</h2>
+          </div>
+        </transition>
 
-      <!-- Offline Channels -->
-      <div>
-        <ChannelList :channels="offlineChannels" />
+        <!-- Offline Channels -->
+        <div>
+          <ChannelList :channels="offlineChannels" />
+        </div>
       </div>
     </div>
-    <div v-else><Spinner /></div>
   </div>
 </template>
 
