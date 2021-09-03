@@ -35,6 +35,5 @@ app.include_router(api_router)
 async def root(request: Request):
     return {
         'msg': "Holo Who's Live API",
-        'docs': f'{request.url.scheme}://{request.url.hostname}:{request.url.port}/docs',
         'dev': settings.dev
     }
