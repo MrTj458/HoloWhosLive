@@ -43,6 +43,9 @@ const sortBySubCount = (channels) => {
   return channels.sort((a, b) => b.subscribers - a.subscribers)
 }
 
+/**
+ * Filter channels based on the selected filter
+ */
 const filteredChannels = computed(() => {
   if (filter.value === 'All') {
     return channels.value
@@ -50,10 +53,16 @@ const filteredChannels = computed(() => {
   return channels.value.filter((c) => c.group === filter.value)
 })
 
+/**
+ * Live channels based on selected filter
+ */
 const liveChannels = computed(() => {
   return sortBySubCount(filteredChannels.value.filter((c) => c.is_live))
 })
 
+/**
+ * Offline channels based on selected filter
+ */
 const offlineChannels = computed(() => {
   return sortBySubCount(filteredChannels.value.filter((c) => !c.is_live))
 })

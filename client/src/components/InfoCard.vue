@@ -20,10 +20,16 @@ import { defineProps, computed } from 'vue'
 
 const props = defineProps(['channel'])
 
+/**
+ * Create channel URL based on Youtube ID
+ */
 const channelUrl = computed(() => {
   return `https://youtube.com/channel/${props.channel.channel_id}/live`
 })
 
+/**
+ * Add commas to subcount
+ */
 const subCount = computed(() => {
   return props.channel.subscribers
     .toString()

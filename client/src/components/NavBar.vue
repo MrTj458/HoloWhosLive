@@ -1,6 +1,7 @@
 <template>
   <nav>
     <ul>
+      <!-- Left side -->
       <div>
         <li>
           <router-link :to="{ name: 'Home' }">
@@ -8,10 +9,13 @@
           </router-link>
         </li>
       </div>
+
+      <!-- Right Side -->
       <div>
         <li>
+          <!-- Filter -->
           Showing:
-          <select @change="changeFilter" class="dropdown">
+          <select v-model="filter" class="dropdown">
             <option value="All" selected>All</option>
             <option value="English">English</option>
             <option value="Indonesia">Indonesia</option>
@@ -28,10 +32,6 @@
 import useFilter from '@/composables/useFilter'
 
 const { filter } = useFilter()
-
-const changeFilter = (e) => {
-  filter.value = e.target.value
-}
 </script>
 
 <style scoped>
