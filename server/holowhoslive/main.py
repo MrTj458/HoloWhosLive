@@ -10,6 +10,7 @@ app = FastAPI()
 
 origins = [
     'http://localhost:8080',
+    'https://holowhoslive.netlify.app',
 ]
 
 app.add_middleware(
