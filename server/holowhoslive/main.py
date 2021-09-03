@@ -6,12 +6,15 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import holowhoslive.api as routers
 
-app = FastAPI()
+settings = get_settings()
 
 origins = [
-    'http://localhost:8080',
     'https://holowhoslive.netlify.app',
 ]
+if settings.dev:
+    origins.append('http://localhost:8080')
+
+app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
@@ -32,5 +35,6 @@ app.include_router(api_router)
 async def root(request: Request):
     return {
         'msg': "Holo Who's Live API",
-        'docs': f'{request.url.scheme}://{request.url.hostname}:{request.url.port}/docs'
+        'docs': f'{request.url.scheme}://{request.url.hostname}:{request.url.port}/docs',
+        'dev': settings.dev
     }
