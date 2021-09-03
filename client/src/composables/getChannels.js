@@ -12,8 +12,8 @@ const getChannels = () => {
 
     try {
       const res = await axios.get(
-        // 'https://holowhoslive.herokuapp.com/api/channels/'
-        'http://localhost:8000/api/channels/'
+        'https://holowhoslive.herokuapp.com/api/channels/'
+        // 'http://localhost:8000/api/channels/'
       )
       data.value = res.data
       loading.value = false
