@@ -6,8 +6,6 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import holowhoslive.api as routers
 
-Base.metadata.create_all(bind=engine)
-
 app = FastAPI()
 
 origins = [
