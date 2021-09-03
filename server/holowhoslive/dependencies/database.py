@@ -16,6 +16,7 @@ Base = declarative_base()
 
 
 def get_db():
+    """Creates a SqlAlchemy DB Session"""
     db = SessionLocal()
     try:
         yield db

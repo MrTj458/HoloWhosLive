@@ -1,15 +1,18 @@
-from holowhoslive.actions.channels import fetch_channel_data
 import pickle
+import logging
 from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from holowhoslive.models import Channel
+from holowhoslive.actions.channels import fetch_channel_data
 from holowhoslive.dependencies import get_yt_service, get_db, get_redis
 from holowhoslive.schemas.channel import ChannelCreateSchema, ChannelSchema
 
+log = logging.getLogger('uvicorn')
+
 router = APIRouter(
-    prefix='/api/channels',
+    prefix='/channels',
     tags=['channels'],
 )
 
@@ -22,11 +25,10 @@ def get_channel_data(r=Depends(get_redis), db: Session = Depends(get_db), servic
     # Check for cached data and return if exists
     data = r.get('cached_channels')
     if data:
-        print('Fetched from Redis cache')
         return pickle.loads(data)
 
     # Fetch from Youtube api and cache the results
-    print('Fetching from YT API')
+    log.info('Fetching from Youtub API')
     data = fetch_channel_data(db, service)
     r.setex('cached_channels', '300', pickle.dumps(data))
 

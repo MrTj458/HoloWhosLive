@@ -9,6 +9,5 @@ class Channel(Base):
     id = Column(Integer, primary_key=True, index=True)
     last_name = Column(String, index=True)
     first_name = Column(String, index=True)
-    # channel_name = Column(String, index=True)
     channel_id = Column(String, unique=True, index=True)
     group = Column(String, index=True)

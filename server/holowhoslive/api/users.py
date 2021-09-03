@@ -7,7 +7,7 @@ from holowhoslive.models import User
 from holowhoslive.schemas.user import UserSchema, UserCreateSchema
 
 router = APIRouter(
-    prefix='/api/users',
+    prefix='/users',
     tags=['users'],
 )
 

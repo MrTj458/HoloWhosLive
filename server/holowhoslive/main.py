@@ -1,10 +1,10 @@
 from holowhoslive.config import Settings, get_settings
 from holowhoslive.dependencies.database import engine
 from holowhoslive.models import Base
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 
-from holowhoslive.api import channel_router, user_router
+import holowhoslive.api as routers
 
 Base.metadata.create_all(bind=engine)
 
@@ -22,8 +22,11 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
-app.include_router(user_router)
-app.include_router(channel_router)
+api_router = APIRouter(prefix='/api')
+api_router.include_router(routers.user_router)
+api_router.include_router(routers.channel_router)
+
+app.include_router(api_router)
 
 
 @app.get("/")
