@@ -42,4 +42,10 @@ const props = defineProps(['channels'])
   position: absolute;
   transition: all 0.3s ease;
 }
+
+@media only screen and (max-width: 800px) {
+  .list {
+    gap: 10px;
+  }
+}
 </style>

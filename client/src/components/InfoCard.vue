@@ -1,5 +1,5 @@
 <template>
-  <a :href="channelUrl" class="card">
+  <a :href="channelUrl">
     <div :class="{ card: true, is_live: props.channel.is_live }">
       <img
         :src="props.channel.images.medium"
@@ -40,11 +40,13 @@ const subCount = computed(() => {
 <style scoped>
 a {
   text-decoration: none;
+  justify-self: center;
 }
 
 img {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  width: 100%;
 }
 
 .card {
@@ -54,6 +56,7 @@ img {
   text-align: center;
   text-decoration: none;
   transition: all 0.1s ease;
+  width: 100%;
 }
 
 .card:hover {
@@ -72,5 +75,11 @@ img {
 
 small {
   display: block;
+}
+
+@media only screen and (max-width: 600px) {
+  .card {
+    width: 48vw;
+  }
 }
 </style>
