@@ -9,7 +9,7 @@ import holowhoslive.api as routers
 settings = get_settings()
 
 origins = [
-    'https://holowhoslive.netlify.app',
+    'https://www.holowhos.live',
 ]
 if settings.dev:
     origins.append('http://localhost:8080')
