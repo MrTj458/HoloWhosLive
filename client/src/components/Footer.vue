@@ -5,9 +5,11 @@
     </div>
     <div>
       Created by
-      <a href="https://twitter.com/tjhod" target="_blank">@tjhod</a> | Check out
-      more of my work
-      <a href="https://www.trevorhodsdon.dev/" target="_blank">here</a>.
+      <a href="https://twitter.com/tjhod" target="_blank">@tjhod</a>
+      |
+      <a href="https://www.trevorhodsdon.dev/" target="_blank"
+        >trevorhodsdon.dev</a
+      >
     </div>
   </div>
 </template>
