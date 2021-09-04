@@ -3,7 +3,7 @@ name: Build Docker Image and Deploy to Heroku
 on:
   push:
     branches:
-      - prod
+      - master
 
 jobs:
   app1:
