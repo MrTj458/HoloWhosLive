@@ -48,12 +48,11 @@ img {
 }
 
 .card {
-  background-color: white;
+  background-color: var(--highlight);
   box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   text-align: center;
   text-decoration: none;
-  color: #000;
   transition: all 0.1s ease;
 }
 
@@ -68,7 +67,7 @@ img {
 }
 
 .is_live {
-  border: 4px solid red;
+  border: 4px solid var(--live-color);
 }
 
 small {

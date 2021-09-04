@@ -1,5 +1,5 @@
 <template>
-  <div id="main">
+  <div id="main" :class="theme">
     <div>
       <NavBar />
       <div class="content">
@@ -11,8 +11,12 @@
 </template>
 
 <script setup>
+import useTheme from '@/composables/useTheme'
+
 import NavBar from '@/components/NavBar'
 import Footer from '@/components/Footer'
+
+const { theme } = useTheme()
 </script>
 
 <style scoped>
@@ -21,6 +25,8 @@ import Footer from '@/components/Footer'
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  background-color: var(--background);
+  font-family: 'Nunito', sans-serif;
 }
 
 .content {

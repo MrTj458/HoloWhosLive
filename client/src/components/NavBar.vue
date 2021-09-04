@@ -11,7 +11,10 @@
       </div>
 
       <!-- Right Side -->
-      <div>
+      <div class="flex">
+        <!-- <li>
+          <ThemeToggle />
+        </li> -->
         <li>
           <!-- Filter -->
           Showing:
@@ -31,12 +34,14 @@
 <script setup>
 import useFilter from '@/composables/useFilter'
 
+// import ThemeToggle from '@/components/ThemeToggle'
+
 const { filter } = useFilter()
 </script>
 
 <style scoped>
 a {
-  color: #000;
+  color: var(--text-color);
   text-decoration: none;
 }
 
@@ -46,7 +51,7 @@ h1 {
 
 nav {
   width: 100%;
-  background-color: white;
+  background-color: var(--highlight);
   padding: 10px;
 }
 
@@ -62,7 +67,12 @@ nav ul {
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 10px 20px;
-  background-color: #eee;
+  background-color: var(--background);
   box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.flex {
+  display: flex;
+  align-items: center;
 }
 </style>
