@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import axios from 'axios'
+import api from '../utils/axios'
 
 const getChannels = () => {
   const data = ref(null)
@@ -11,10 +11,7 @@ const getChannels = () => {
     loading.value = true
 
     try {
-      const res = await axios.get(
-        'https://holowhoslive.herokuapp.com/api/channels/'
-        // 'http://localhost:8000/api/channels/'
-      )
+      const res = await api.get('/api/channels/')
       data.value = res.data
       loading.value = false
     } catch (err) {

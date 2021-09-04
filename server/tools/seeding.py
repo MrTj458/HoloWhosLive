@@ -6,7 +6,7 @@ def seed_channels():
     with open('tools/channels.json') as f:
         channels = json.load(f)
     for channel in channels:
-        requests.post('https://holowhoslive.herokuapp.com/api/channels', json=channel)
+        requests.post('http://localhost:8000/api/channels', json=channel)
     print('Channels seeded!')
 
 

@@ -30,5 +30,16 @@ services:
   redis:
     image: redis:6.0-alpine
 
+  client:
+    build:
+      context: ./client
+    volumes:
+      - ./client:/app
+    ports:
+      - 8080:8080
+    command: npm run serve
+    depends_on:
+      - server
+
 volumes:
   db_data:
