@@ -4,8 +4,10 @@
       <ThemeToggle />
     </div>
     <div>
-      Created by Trevor Hodsdon
-      <a href="https://twitter.com/tjhod" target="_blank">@tjhod</a>
+      Created by
+      <a href="https://twitter.com/tjhod" target="_blank">@tjhod</a> | Check out
+      more of my work
+      <a href="https://www.trevorhodsdon.dev/" target="_blank">here</a>.
     </div>
   </div>
 </template>
