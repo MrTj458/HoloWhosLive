@@ -18,7 +18,7 @@ router = APIRouter(
 
 
 @router.get('/', response_model=List[ChannelSchema])
-def get_channel_data(r=Depends(get_redis), db: Session = Depends(get_db), service=Depends(get_yt_service)):
+async def get_channel_data(r=Depends(get_redis), db: Session = Depends(get_db), service=Depends(get_yt_service)):
     """
     Get channel data for all channels saved in the database.
     """
@@ -29,7 +29,7 @@ def get_channel_data(r=Depends(get_redis), db: Session = Depends(get_db), servic
 
     # Fetch from Youtube api and cache the results
     log.info('Fetching from Youtub API')
-    data = fetch_channel_data(db, service)
+    data = await fetch_channel_data(db, service)
     r.setex('cached_channels', '300', pickle.dumps(data))
 
     return data

@@ -1,4 +1,5 @@
-import requests
+import asyncio
+import httpx
 from typing import List
 from sqlalchemy.orm import Session
 
@@ -22,41 +23,41 @@ def _get_yt_data(channels, yt_service):
     return channel_data
 
 
-def _get_is_live(channel_id):
-    channel_text = requests.get(
-        f'https://www.youtube.com/channel/{channel_id}').text
+async def _get_is_live(channel_id):
+    async with httpx.AsyncClient() as client:
+        res = await client.get(f'https://www.youtube.com/channel/{channel_id}')
 
-    return '{"text":" watching"}' in channel_text
+    return '{"text":" watching"}' in res.text
 
 
-def fetch_channel_data(db: Session, yt_service) -> List[ChannelSchema]:
+async def _create_channel(channel, yt_data):
+    # Find YT channel from list of channel data
+    yt_channel = list(
+        filter(lambda c: c['id'] == channel.channel_id, yt_data))[0]
+
+    # Build channel instance
+    new_channel = ChannelSchema(
+        **channel.__dict__,
+        images=ChannelImageSchema(
+            default=yt_channel['snippet']['thumbnails']['default']['url'],
+            medium=yt_channel['snippet']['thumbnails']['medium']['url'],
+            high=yt_channel['snippet']['thumbnails']['high']['url'],
+        ),
+        channel_name=yt_channel['snippet']['title'],
+        subscribers=yt_channel['statistics']['subscriberCount'],
+        is_live=await _get_is_live(channel.channel_id),
+    )
+
+    return new_channel
+
+async def fetch_channel_data(db: Session, yt_service) -> List[ChannelSchema]:
     """
         Get all of the channel data from Youtube for the channels saved in the database.
     """
     db_channels = db.query(Channel).all()
     yt_data = _get_yt_data(db_channels, yt_service)
 
-    # Grab all needed data and create Channel object
-    channels: List[ChannelSchema] = []
-
-    for channel in db_channels:
-        # Find the channel in the fetched YT data list
-        yt_channel = list(
-            filter(lambda c: c['id'] == channel.channel_id, yt_data))[0]
-
-        # Build channel instance
-        new_channel = ChannelSchema(
-            **channel.__dict__,
-            images=ChannelImageSchema(
-                default=yt_channel['snippet']['thumbnails']['default']['url'],
-                medium=yt_channel['snippet']['thumbnails']['medium']['url'],
-                high=yt_channel['snippet']['thumbnails']['high']['url'],
-            ),
-            channel_name=yt_channel['snippet']['title'],
-            subscribers=yt_channel['statistics']['subscriberCount'],
-            is_live=_get_is_live(channel.channel_id),
-        )
-
-        channels.append(new_channel)
+    # In parallel, grab all needed data and create list of channels
+    channels = await asyncio.gather(*[_create_channel(channel, yt_data) for channel in db_channels])
 
     return channels
