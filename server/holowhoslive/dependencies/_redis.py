@@ -1,9 +1,9 @@
-from redis import Redis
+import aioredis
 from holowhoslive.config import get_settings
 
 settings = get_settings()
 
 
-def get_redis():
-    with Redis.from_url(settings.redis_url) as r:
+async def get_redis():
+    async with aioredis.from_url(settings.redis_url) as r:
         yield r

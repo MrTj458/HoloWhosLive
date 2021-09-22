@@ -1,6 +1,7 @@
 import pickle
 import logging
 from typing import List
+from aioredis import Redis
 from fastapi import APIRouter, Depends
 
 from holowhoslive.services import YoutubeService
@@ -17,20 +18,20 @@ router = APIRouter(
 
 @router.get("/", response_model=List[YtChannelSchema])
 async def get_yt_channel_data(
-    r=Depends(get_redis), yt_service: YoutubeService = Depends(YoutubeService)
+    r: Redis = Depends(get_redis), yt_service: YoutubeService = Depends(YoutubeService)
 ):
     """
     Get combined data from Youtube and database. Refreshed every 5 minutes.
     """
     # Check for cached data and return if exists
-    data = r.get("cached_yt_channels")
+    data = await r.get("cached_yt_channels")
     if data:
         return pickle.loads(data)
 
     # Fetch from Youtube api and cache the results
     log.info("Fetching from Youtub API")
     data = await yt_service.get_all_data()
-    r.setex("cached_yt_channels", "300", pickle.dumps(data))
+    await r.setex("cached_yt_channels", "300", pickle.dumps(data))
 
     return data
 
