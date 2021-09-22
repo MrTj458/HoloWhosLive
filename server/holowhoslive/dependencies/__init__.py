@@ -1,3 +1,3 @@
-from .database import get_db
-from .youtube import get_yt_service
-from .redis import get_redis
+from ._database import get_db, Base
+from ._youtube import get_yt_service
+from ._redis import get_redis

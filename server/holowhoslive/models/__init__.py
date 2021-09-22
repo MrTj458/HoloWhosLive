@@ -1,3 +1,2 @@
-from holowhoslive.dependencies.database import Base
-from .user import User
-from .channel import Channel
+from holowhoslive.dependencies import Base
+from ._yt_channel import YtChannel

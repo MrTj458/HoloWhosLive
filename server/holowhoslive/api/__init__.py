@@ -1,2 +1,1 @@
-from .channels import router as channel_router
-from .users import router as user_router
+from ._yt_channels_router import router as yt_channel_router

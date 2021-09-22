@@ -1,6 +1,4 @@
-from holowhoslive.config import Settings, get_settings
-from holowhoslive.dependencies.database import engine
-from holowhoslive.models import Base
+from holowhoslive.config import get_settings
 from fastapi import FastAPI, Request, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -25,12 +23,11 @@ app.add_middleware(
 )
 
 api_router = APIRouter(prefix="/api")
-api_router.include_router(routers.user_router)
-api_router.include_router(routers.channel_router)
+api_router.include_router(routers.yt_channel_router)
 
 app.include_router(api_router)
 
 
 @app.get("/")
-async def root(request: Request):
+async def root():
     return {"msg": "Holo Who's Live API", "dev": settings.dev}
