@@ -24,6 +24,7 @@ app.add_middleware(
 
 api_router = APIRouter(prefix="/api")
 api_router.include_router(routers.yt_channel_router)
+api_router.include_router(routers.group_router)
 
 app.include_router(api_router)
 

@@ -1,4 +1,4 @@
-"""empty message
+"""Add Youtube Channels
 
 Revision ID: 25985aa5fdda
 Revises: 
