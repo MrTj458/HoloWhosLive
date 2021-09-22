@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 settings = get_settings()
 
 # SQLAlchemy needs 'postgresql://' instead of 'postgres://' that Heroku gives so swap it over.
-db_url = 'postgresql://' + settings.database_url.split('://')[1]
+db_url = "postgresql://" + settings.database_url.split("://")[1]
 
 engine = create_engine(db_url)
 

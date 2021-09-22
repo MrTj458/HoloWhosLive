@@ -1,4 +1,3 @@
-import os
 from redis import Redis
 from holowhoslive.config import get_settings
 

@@ -1,11 +1,18 @@
-FROM python:3.9-alpine
+FROM python:3.9-slim
+
+RUN apt update \
+  && apt upgrade -y \
+  && apt install -y build-essential
 
 WORKDIR /app
 
-RUN apk update && apk add --no-cache build-base postgresql-dev gcc python3-dev musl-dev
+COPY pyproject.toml poetry.lock /app/
 
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip \
+  && pip install poetry
+
+RUN  poetry config virtualenvs.create false \
+  && poetry install --no-dev --no-interaction --no-ansi
 
 COPY . .
 

@@ -4,7 +4,7 @@ from holowhoslive.dependencies.database import Base
 
 
 class Channel(Base):
-    __tablename__ = 'channels'
+    __tablename__ = "channels"
 
     id = Column(Integer, primary_key=True, index=True)
     last_name = Column(String, index=True)

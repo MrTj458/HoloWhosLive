@@ -1,14 +1,14 @@
 import json
-import requests
+import httpx
 
 
 def seed_channels():
-    with open('tools/channels.json') as f:
+    with open("tools/channels.json") as f:
         channels = json.load(f)
     for channel in channels:
-        requests.post('http://localhost:8000/api/channels', json=channel)
-    print('Channels seeded!')
+        httpx.post("http://localhost:8000/api/channels", json=channel)
+    print("Channels seeded!")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     seed_channels()
