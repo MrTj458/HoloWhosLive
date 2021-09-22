@@ -1,10 +1,10 @@
 from sqlalchemy import Column, Integer, String, Boolean
 
-from holowhoslive.dependencies.database import Base
+from holowhoslive.dependencies import Base
 
 
-class Channel(Base):
-    __tablename__ = "channels"
+class YtChannel(Base):
+    __tablename__ = "yt_channels"
 
     id = Column(Integer, primary_key=True, index=True)
     last_name = Column(String, index=True)

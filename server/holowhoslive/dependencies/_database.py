@@ -8,7 +8,7 @@ settings = get_settings()
 # SQLAlchemy needs 'postgresql://' instead of 'postgres://' that Heroku gives so swap it over.
 db_url = "postgresql://" + settings.database_url.split("://")[1]
 
-engine = create_engine(db_url)
+engine = create_engine(db_url, future=True)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -17,8 +17,5 @@ Base = declarative_base()
 
 def get_db():
     """Creates a SqlAlchemy DB Session"""
-    db = SessionLocal()
-    try:
+    with SessionLocal() as db:
         yield db
-    finally:
-        db.close()

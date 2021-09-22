@@ -2,28 +2,28 @@ from typing import Optional
 from pydantic import BaseModel, AnyHttpUrl
 
 
-class ChannelImageSchema(BaseModel):
+class YtChannelImageSchema(BaseModel):
     default: AnyHttpUrl
     medium: AnyHttpUrl
     high: AnyHttpUrl
 
 
-class ChannelBaseSchema(BaseModel):
+class YtChannelBaseSchema(BaseModel):
     first_name: str
     last_name: str
     channel_id: str
     group: str
 
 
-class ChannelCreateSchema(ChannelBaseSchema):
+class YtChannelCreateSchema(YtChannelBaseSchema):
     pass
 
 
-class ChannelSchema(ChannelBaseSchema):
+class YtChannelSchema(YtChannelBaseSchema):
     id: int
     channel_name: Optional[str]
     is_live: Optional[bool]
-    images: Optional[ChannelImageSchema]
+    images: Optional[YtChannelImageSchema]
     subscribers: Optional[int]
 
     class Config:

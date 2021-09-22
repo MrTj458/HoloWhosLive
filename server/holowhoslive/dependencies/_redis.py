@@ -5,8 +5,5 @@ settings = get_settings()
 
 
 def get_redis():
-    r = Redis.from_url(settings.redis_url)
-    try:
+    with Redis.from_url(settings.redis_url) as r:
         yield r
-    finally:
-        r.close()
