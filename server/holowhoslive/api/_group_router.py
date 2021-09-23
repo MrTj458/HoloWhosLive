@@ -8,12 +8,12 @@ router = APIRouter(prefix="/groups", tags=["groups"])
 
 
 @router.get("/", response_model=List[GroupSchema])
-def get_groups(group_service: GroupService = Depends(GroupService)):
-    return group_service.get_all()
+async def get_groups(group_service: GroupService = Depends(GroupService)):
+    return await group_service.get_all()
 
 
 @router.post("/", response_model=GroupSchema)
-def create_group(
+async def create_group(
     group: GroupCreateSchema, group_service: GroupService = Depends(GroupService)
 ):
-    return group_service.add(group)
+    return await group_service.add(group)

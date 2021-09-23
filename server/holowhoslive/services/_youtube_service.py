@@ -2,7 +2,7 @@ import asyncio
 import httpx
 from typing import List
 from fastapi import Depends
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from holowhoslive.dependencies import get_db, get_yt_service
@@ -16,7 +16,7 @@ from holowhoslive.schemas import (
 
 class YoutubeService:
     def __init__(
-        self, db: Session = Depends(get_db), yt_client=Depends(get_yt_service)
+        self, db: AsyncSession = Depends(get_db), yt_client=Depends(get_yt_service)
     ):
         self.db = db
         self.yt_client = yt_client
@@ -69,7 +69,8 @@ class YoutubeService:
         """
         Get all of the channel data from Youtube for the channels saved in the database.
         """
-        db_channels = self.db.execute(select(YtChannel)).scalars().all()
+        db_channels = await self.db.execute(select(YtChannel))
+        db_channels = db_channels.scalars().all()
         yt_data = self._get_yt_data(db_channels)
 
         # In parallel, grab all needed data and create list of channels
@@ -81,12 +82,13 @@ class YoutubeService:
 
     async def get_db_data(self) -> List[YtChannelSchema]:
         """Get Youtube channel data that is saved in db"""
-        return self.db.execute(select(YtChannel)).scalars().all()
+        channels = await self.db.execute(select(YtChannel))
+        return channels.scalars().all()
 
     async def add_channel(self, channel: YtChannelCreateSchema) -> YtChannel:
         """Add new Channel to the database"""
         db_channel = YtChannel(**channel.dict())
         self.db.add(db_channel)
-        self.db.commit()
-        self.db.refresh(db_channel)
+        await self.db.commit()
+        await self.db.refresh(db_channel)
         return db_channel
