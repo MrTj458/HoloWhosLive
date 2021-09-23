@@ -2,31 +2,26 @@ import asyncio
 import httpx
 from typing import List
 from fastapi import Depends
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
 
-from holowhoslive.dependencies import get_db, get_yt_service
+from holowhoslive.dependencies import get_yt_service
 from holowhoslive.models import YtChannel
 from holowhoslive.schemas import (
     YtChannelCreateSchema,
     YtChannelSchema,
     YtChannelImageSchema,
+    YtChannelApiSchema,
 )
 
 
 class YoutubeService:
-    def __init__(
-        self, db: AsyncSession = Depends(get_db), yt_client=Depends(get_yt_service)
-    ):
-        self.db = db
+    def __init__(self, yt_client=Depends(get_yt_service)):
         self.yt_client = yt_client
 
-    async def get_all_data(self) -> List[YtChannelSchema]:
+    async def get_all_data(self) -> List[YtChannelApiSchema]:
         """
         Get all of the channel data from Youtube for the channels saved in the database.
         """
-        db_channels = await self.db.execute(select(YtChannel))
-        db_channels = db_channels.scalars().all()
+        db_channels = await YtChannelSchema.from_queryset(YtChannel.all())
         yt_data = self._get_yt_data(db_channels)
 
         # In parallel, grab all needed data and create list of channels
@@ -38,27 +33,20 @@ class YoutubeService:
 
     async def get_all_db_data(self) -> List[YtChannelSchema]:
         """Get Youtube channel data that is saved in db"""
-        channels = await self.db.execute(select(YtChannel))
-        return channels.scalars().all()
+        return await YtChannelSchema.from_queryset(YtChannel.all())
 
-    async def get(self, id: int):
+    async def get(self, id: int) -> YtChannelSchema:
         """Get a single channel from the database"""
-        channel = await self.db.execute(select(YtChannel).where(YtChannel.id == id))
-        return channel.scalars().first()
+        return await YtChannelSchema.from_queryset_single(YtChannel.get(id=id))
 
-    async def add(self, channel: YtChannelCreateSchema) -> YtChannel:
+    async def add(self, channel: YtChannelCreateSchema) -> YtChannelSchema:
         """Add new Channel to the database"""
-        db_channel = YtChannel(**channel.dict())
-        self.db.add(db_channel)
-        await self.db.commit()
-        await self.db.refresh(db_channel)
-        return db_channel
+        db_channel = await YtChannel.create(**channel.dict())
+        return await YtChannelSchema.from_tortoise_orm(db_channel)
 
     async def delete(self, id: int):
         """Delete a Youtube channel from the database"""
-        channel = await self.get(id)
-        await self.db.delete(channel)
-        await self.db.commit()
+        await YtChannel.filter(id=id).delete()
 
     def _get_yt_data(self, channels):
         """Fetch channel data from the Youtube API"""
@@ -90,8 +78,8 @@ class YoutubeService:
         yt_channel = list(filter(lambda c: c["id"] == channel.channel_id, yt_data))[0]
 
         # Build channel instance
-        new_channel = YtChannelSchema(
-            **channel.__dict__,
+        new_channel = YtChannelApiSchema(
+            **channel.dict(),
             images=YtChannelImageSchema(
                 default=yt_channel["snippet"]["thumbnails"]["default"]["url"],
                 medium=yt_channel["snippet"]["thumbnails"]["medium"]["url"],

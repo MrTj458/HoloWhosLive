@@ -6,7 +6,12 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 from holowhoslive.services import YoutubeService
 from holowhoslive.dependencies import get_redis
-from holowhoslive.schemas import YtChannelCreateSchema, YtChannelSchema
+
+from holowhoslive.schemas import (
+    YtChannelSchema,
+    YtChannelCreateSchema,
+    YtChannelApiSchema,
+)
 
 log = logging.getLogger("uvicorn")
 
@@ -16,7 +21,7 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=List[YtChannelSchema])
+@router.get("/", response_model=List[YtChannelApiSchema])
 async def get_yt_channel_data(
     r: Redis = Depends(get_redis), yt_service: YoutubeService = Depends(YoutubeService)
 ):
@@ -29,9 +34,11 @@ async def get_yt_channel_data(
         return pickle.loads(data)
 
     # Fetch from Youtube api and cache the results
-    log.info("Fetching from Youtub API")
+    log.info("Fetching from Youtube API")
     data = await yt_service.get_all_data()
-    await r.setex("cached_yt_channels", "300", pickle.dumps(data))
+    await r.setex(
+        "cached_yt_channels", "300", pickle.dumps([item.dict() for item in data])
+    )
 
     return data
 
@@ -51,7 +58,7 @@ async def create_saved_yt_channel(
     """
     Add a new channel to be searched for in the Youtube api.
     """
-    return await yt_service.add(channel)
+    return YtChannelSchema.from_orm(await yt_service.add(channel))
 
 
 @router.delete("/{id}")

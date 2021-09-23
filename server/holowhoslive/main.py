@@ -1,6 +1,7 @@
 from holowhoslive.config import get_settings
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
+from tortoise.contrib.fastapi import register_tortoise
 
 import holowhoslive.api as routers
 
@@ -32,3 +33,10 @@ app.include_router(api_router)
 @app.get("/")
 async def root():
     return {"msg": "Holo Who's Live API", "dev": settings.dev}
+
+
+register_tortoise(
+    app,
+    db_url=settings.database_url,
+    modules={"models": ["holowhoslive.models"]},
+)

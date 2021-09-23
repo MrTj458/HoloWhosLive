@@ -13,3 +13,14 @@ class Settings(BaseSettings):
 @lru_cache()
 def get_settings() -> Settings:
     return Settings()
+
+
+TORTOISE_ORM = {
+    "connections": {"default": get_settings().database_url},
+    "apps": {
+        "models": {
+            "models": ["holowhoslive.models", "aerich.models"],
+            "default_connection": "default",
+        },
+    },
+}
