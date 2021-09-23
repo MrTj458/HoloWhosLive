@@ -19,11 +19,10 @@
           <!-- Filter -->
           Showing:
           <select v-model="filter" class="dropdown">
-            <option value="All" selected>All</option>
-            <option value="English">English</option>
-            <option value="Indonesia">Indonesia</option>
-            <option value="Japan">Japan</option>
-            <option value="Holostars">Holostars</option>
+            <option value="0" selected>All</option>
+            <template v-for="group in groups" :key="group.id">
+              <option :value="group.id">{{ group.name }}</option>
+            </template>
           </select>
         </li>
       </div>
@@ -33,10 +32,10 @@
 
 <script setup>
 import useFilter from '@/composables/useFilter'
-
-// import ThemeToggle from '@/components/ThemeToggle'
+import getGroups from '@/composables/getGroups'
 
 const { filter } = useFilter()
+const { data: groups } = getGroups()
 </script>
 
 <style scoped>

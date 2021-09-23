@@ -2,7 +2,7 @@ import pickle
 import logging
 from typing import List
 from aioredis import Redis
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 
 from holowhoslive.services import YoutubeService
 from holowhoslive.dependencies import get_redis
@@ -41,14 +41,29 @@ async def get_saved_yt_channel_data(
     yt_service: YoutubeService = Depends(YoutubeService),
 ):
     """Get the saved channel data in the database only."""
-    return await yt_service.get_db_data()
+    return await yt_service.get_all_db_data()
 
 
-@router.post("/", response_model=YtChannelSchema)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=YtChannelSchema)
 async def create_saved_yt_channel(
     channel: YtChannelCreateSchema, yt_service: YoutubeService = Depends(YoutubeService)
 ):
     """
     Add a new channel to be searched for in the Youtube api.
     """
-    return await yt_service.add_channel(channel)
+    return await yt_service.add(channel)
+
+
+@router.delete("/{id}")
+async def delete_yt_channel(
+    id: int, yt_service: YoutubeService = Depends(YoutubeService)
+):
+    channel = await yt_service.get(id)
+
+    if not channel:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Youtube channel not found."
+        )
+
+    await yt_service.delete(id)
+    return {"ok": True}

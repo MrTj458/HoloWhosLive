@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-const filter = ref('All')
+const filter = ref(0)
 
 const useFilter = () => {
   return {

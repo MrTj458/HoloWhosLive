@@ -47,10 +47,10 @@ const sortBySubCount = (channels) => {
  * Filter channels based on the selected filter
  */
 const filteredChannels = computed(() => {
-  if (filter.value === 'All') {
+  if (+filter.value === 0) {
     return channels.value
   }
-  return channels.value.filter((c) => c.group === filter.value)
+  return channels.value.filter((c) => c.group.id === +filter.value)
 })
 
 /**

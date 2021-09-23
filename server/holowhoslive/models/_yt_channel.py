@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy.orm import relationship
 
 from holowhoslive.dependencies import Base
 
@@ -10,4 +11,6 @@ class YtChannel(Base):
     last_name = Column(String, index=True)
     first_name = Column(String, index=True)
     channel_id = Column(String, unique=True, index=True)
-    group = Column(String, index=True)
+
+    group_id = Column(Integer, ForeignKey("groups.id"))
+    group = relationship("Group", back_populates="yt_channels", lazy="selectin")

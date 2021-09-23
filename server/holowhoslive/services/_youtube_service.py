@@ -21,6 +21,45 @@ class YoutubeService:
         self.db = db
         self.yt_client = yt_client
 
+    async def get_all_data(self) -> List[YtChannelSchema]:
+        """
+        Get all of the channel data from Youtube for the channels saved in the database.
+        """
+        db_channels = await self.db.execute(select(YtChannel))
+        db_channels = db_channels.scalars().all()
+        yt_data = self._get_yt_data(db_channels)
+
+        # In parallel, grab all needed data and create list of channels
+        channels = await asyncio.gather(
+            *[self._create_channel(channel, yt_data) for channel in db_channels]
+        )
+
+        return channels
+
+    async def get_all_db_data(self) -> List[YtChannelSchema]:
+        """Get Youtube channel data that is saved in db"""
+        channels = await self.db.execute(select(YtChannel))
+        return channels.scalars().all()
+
+    async def get(self, id: int):
+        """Get a single channel from the database"""
+        channel = await self.db.execute(select(YtChannel).where(YtChannel.id == id))
+        return channel.scalars().first()
+
+    async def add(self, channel: YtChannelCreateSchema) -> YtChannel:
+        """Add new Channel to the database"""
+        db_channel = YtChannel(**channel.dict())
+        self.db.add(db_channel)
+        await self.db.commit()
+        await self.db.refresh(db_channel)
+        return db_channel
+
+    async def delete(self, id: int):
+        """Delete a Youtube channel from the database"""
+        channel = await self.get(id)
+        await self.db.delete(channel)
+        await self.db.commit()
+
     def _get_yt_data(self, channels):
         """Fetch channel data from the Youtube API"""
         channel_ids = [channel.channel_id for channel in channels]
@@ -64,31 +103,3 @@ class YoutubeService:
         )
 
         return new_channel
-
-    async def get_all_data(self) -> List[YtChannelSchema]:
-        """
-        Get all of the channel data from Youtube for the channels saved in the database.
-        """
-        db_channels = await self.db.execute(select(YtChannel))
-        db_channels = db_channels.scalars().all()
-        yt_data = self._get_yt_data(db_channels)
-
-        # In parallel, grab all needed data and create list of channels
-        channels = await asyncio.gather(
-            *[self._create_channel(channel, yt_data) for channel in db_channels]
-        )
-
-        return channels
-
-    async def get_db_data(self) -> List[YtChannelSchema]:
-        """Get Youtube channel data that is saved in db"""
-        channels = await self.db.execute(select(YtChannel))
-        return channels.scalars().all()
-
-    async def add_channel(self, channel: YtChannelCreateSchema) -> YtChannel:
-        """Add new Channel to the database"""
-        db_channel = YtChannel(**channel.dict())
-        self.db.add(db_channel)
-        await self.db.commit()
-        await self.db.refresh(db_channel)
-        return db_channel

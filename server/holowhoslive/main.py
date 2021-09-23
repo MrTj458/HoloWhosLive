@@ -1,5 +1,5 @@
 from holowhoslive.config import get_settings
-from fastapi import FastAPI, Request, APIRouter
+from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 
 import holowhoslive.api as routers

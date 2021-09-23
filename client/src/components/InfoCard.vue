@@ -7,7 +7,7 @@
       />
       <div class="card-info">
         <h2>{{ props.channel.first_name }} {{ props.channel.last_name }}</h2>
-        <p>{{ props.channel.group }}</p>
+        <p>{{ props.channel.group.name }}</p>
         <small>{{ props.channel.channel_name }}</small>
         <small>{{ subCount }} subscribers</small>
       </div>
