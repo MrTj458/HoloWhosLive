@@ -7,13 +7,13 @@ import holowhoslive.api as routers
 
 settings = get_settings()
 
+app = FastAPI()
+
 origins = [
     "https://www.holowhos.live",
 ]
 if settings.dev:
     origins.append("http://localhost:8080")
-
-app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
@@ -24,7 +24,8 @@ app.add_middleware(
 )
 
 api_router = APIRouter(prefix="/api")
-api_router.include_router(routers.yt_channel_router)
+api_router.include_router(routers.youtube_router)
+api_router.include_router(routers.twitch_router)
 api_router.include_router(routers.group_router)
 
 app.include_router(api_router)

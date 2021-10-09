@@ -2,13 +2,13 @@ from pydantic import BaseModel, AnyHttpUrl
 from tortoise.contrib.pydantic import pydantic_model_creator
 from tortoise import Tortoise
 
-from holowhoslive.models import Group, YtChannel
+from holowhoslive.models import Group, TwitchChannel, YtChannel
 
 # Init models so relationships are available
 Tortoise.init_models(["holowhoslive.models"], "models")
 
 # -- Groups --
-GroupSchema = pydantic_model_creator(Group, name="GroupSchema", exclude=["yt_channels"])
+GroupSchema = pydantic_model_creator(Group, name="GroupSchema")
 GroupCreateSchema = pydantic_model_creator(
     Group, name="GroupCreateSchema", exclude_readonly=True
 )
@@ -32,6 +32,29 @@ class YtChannelApiSchema(BaseModel):
     is_live: bool
     images: YtChannelImageSchema
     subscribers: int
+    first_name: str
+    last_name: str
+    channel_id: str
+    group: GroupSchema
+
+
+# -- Twitch Channels --
+TwitchChannelSchema = pydantic_model_creator(TwitchChannel, name="TwitchChannelSchema")
+TwitchChannelCreateSchema = pydantic_model_creator(
+    TwitchChannel, name="TwitchChannelCreateSchema", exclude_readonly=True
+)
+
+
+class TwitchChannelImageSchema(BaseModel):
+    default: AnyHttpUrl
+
+
+class TwitchChannelApiSchema(BaseModel):
+    id: int
+    display_name: str
+    is_live: bool
+    images: TwitchChannelImageSchema
+    view_count: int
     first_name: str
     last_name: str
     channel_id: str

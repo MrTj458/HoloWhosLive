@@ -17,7 +17,7 @@ class YoutubeService:
     def __init__(self, yt_client=Depends(get_yt_service)):
         self.yt_client = yt_client
 
-    async def get_all_data(self) -> List[YtChannelApiSchema]:
+    async def get_youtube_data(self) -> List[YtChannelApiSchema]:
         """
         Get all of the channel data from Youtube for the channels saved in the database.
         """
@@ -31,7 +31,7 @@ class YoutubeService:
 
         return channels
 
-    async def get_all_db_data(self) -> List[YtChannelSchema]:
+    async def get_all(self) -> List[YtChannelSchema]:
         """Get Youtube channel data that is saved in db"""
         return await YtChannelSchema.from_queryset(YtChannel.all())
 
@@ -43,6 +43,9 @@ class YoutubeService:
         """Add new Channel to the database"""
         db_channel = await YtChannel.create(**channel.dict())
         return await YtChannelSchema.from_tortoise_orm(db_channel)
+
+    async def update(self, id: int, channel: YtChannelCreateSchema) -> None:
+        await YtChannel.filter(id=id).update(**channel.dict(exclude_unset=True))
 
     async def delete(self, id: int):
         """Delete a Youtube channel from the database"""

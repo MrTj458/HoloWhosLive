@@ -6,7 +6,7 @@ from holowhoslive.schemas import GroupSchema, GroupCreateSchema
 # from holowhoslive.schemas import GroupSchema, GroupCreateSchema
 from holowhoslive.services import GroupService
 
-router = APIRouter(prefix="/groups", tags=["groups"])
+router = APIRouter(prefix="/groups", tags=["Groups"])
 
 
 @router.get("/", response_model=List[GroupSchema])
