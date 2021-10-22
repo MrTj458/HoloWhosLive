@@ -62,7 +62,15 @@ class TwitchService:
     async def delete(self, id: int) -> None:
         await TwitchChannel.filter(id=id).delete()
 
+    async def _get_twitch_access_token(self) -> str:
+        url = f"https://id.twitch.tv/oauth2/token?client_id={self.settings.twitch_id}&client_secret={self.settings.twitch_secret}&grant_type=client_credentials"
+        print("URL: ", url)
+        async with httpx.AsyncClient() as client:
+            res = await client.post(url)
+            return res.json()["access_token"]
+
     async def _get_twitch_data(self, channels: List[TwitchChannelSchema]) -> List:
+        access_token = await self._get_twitch_access_token()
         channel_logins = [c.channel_id for c in channels]
 
         split_logins = [
@@ -76,7 +84,7 @@ class TwitchService:
                 res = await client.get(
                     f"https://api.twitch.tv/helix/users?login={'&login='.join(login_list)}",
                     headers={
-                        "Authorization": f"Bearer {self.settings.twitch_token}",
+                        "Authorization": f"Bearer {access_token}",
                         "Client-Id": self.settings.twitch_id,
                     },
                 )
@@ -85,7 +93,7 @@ class TwitchService:
                 res = await client.get(
                     f"https://api.twitch.tv/helix/streams?user_login={'&user_login='.join(login_list)}",
                     headers={
-                        "Authorization": f"Bearer {self.settings.twitch_token}",
+                        "Authorization": f"Bearer {access_token}",
                         "Client-Id": self.settings.twitch_id,
                     },
                 )

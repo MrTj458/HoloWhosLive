@@ -8,8 +8,8 @@ class Settings(BaseSettings):
     database_url: AnyUrl = os.getenv("DATABASE_URL")
     redis_url: AnyUrl = os.getenv("REDIS_URL")
     youtube_api_key: str = os.getenv("YOUTUBE_API_KEY")
-    twitch_token: str = os.getenv("TWITCH_TOKEN")
     twitch_id: str = os.getenv("TWITCH_ID")
+    twitch_secret: str = os.getenv("TWITCH_SECRET")
 
 
 @lru_cache()

@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 
 services:
   server:
@@ -17,8 +17,8 @@ services:
       - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
       - REDIS_URL=redis://:@redis:6379
       - YOUTUBE_API_KEY=${YOUTUBE_API_KEY}
-      - TWITCH_TOKEN=${TWITCH_TOKEN}
       - TWITCH_ID=${TWITCH_ID}
+      - TWITCH_SECRET=${TWITCH_SECRET}
 
   db:
     image: postgres
