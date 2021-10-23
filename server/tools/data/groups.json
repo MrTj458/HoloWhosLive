@@ -14,5 +14,17 @@
   {
     "name": "Hololive Holostars",
     "platform": "Youtube"
+  },
+  {
+    "name": "Youtube Independent",
+    "platform": "Youtube"
+  },
+  {
+    "name": "VShojo",
+    "platform": "Twitch"
+  },
+  {
+    "name": "Twitch Independent",
+    "platform": "Twitch"
   }
 ]

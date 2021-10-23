@@ -24,9 +24,8 @@ app.add_middleware(
 )
 
 api_router = APIRouter(prefix="/api")
-api_router.include_router(routers.youtube_router)
-api_router.include_router(routers.twitch_router)
 api_router.include_router(routers.group_router)
+api_router.include_router(routers.channels_router)
 
 app.include_router(api_router)
 

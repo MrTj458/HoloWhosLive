@@ -3,7 +3,6 @@ from fastapi import APIRouter, Depends
 
 from holowhoslive.schemas import GroupSchema, GroupCreateSchema
 
-# from holowhoslive.schemas import GroupSchema, GroupCreateSchema
 from holowhoslive.services import GroupService
 
 router = APIRouter(prefix="/groups", tags=["Groups"])

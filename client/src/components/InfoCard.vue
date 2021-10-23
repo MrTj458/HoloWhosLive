@@ -2,14 +2,14 @@
   <a :href="channelUrl">
     <div :class="{ card: true, is_live: props.channel.is_live }">
       <img
-        :src="props.channel.images.medium"
-        :alt="props.channel.channel_name"
+        :src="props.channel.image"
+        :alt="props.channel.display_name"
       />
       <div class="card-info">
         <h2>{{ props.channel.first_name }} {{ props.channel.last_name }}</h2>
         <p>{{ props.channel.group.name }}</p>
-        <small>{{ props.channel.channel_name }}</small>
-        <small>{{ subCount }} subscribers</small>
+        <small>{{ props.channel.display_name }}</small>
+        <small>{{ subCount }}</small>
       </div>
     </div>
   </a>
@@ -24,16 +24,26 @@ const props = defineProps(['channel'])
  * Create channel URL based on Youtube ID
  */
 const channelUrl = computed(() => {
-  return `https://youtube.com/channel/${props.channel.channel_id}/live`
+  if (props.channel.platform === 'Youtube') {
+    return `https://youtube.com/channel/${props.channel.channel_id}/live`
+  } else {
+    return `https://www.twitch.tv/${props.channel.channel_id}`
+  }
 })
 
 /**
  * Add commas to subcount
  */
 const subCount = computed(() => {
-  return props.channel.subscribers
+  if (props.channel.subscribers) {
+    return `${props.channel.subscribers
     .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Subscribers`
+  } else {
+    return `${props.channel.view_count
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Views`
+  }
 })
 </script>
 
@@ -46,7 +56,7 @@ a {
 img {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  width: 100%;
+  width: 240px;
 }
 
 .card {

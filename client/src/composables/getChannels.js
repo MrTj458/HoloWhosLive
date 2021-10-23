@@ -11,7 +11,7 @@ const getChannels = () => {
     loading.value = true
 
     try {
-      const res = await api.get('/api/youtube/')
+      const res = await api.get('/api/channels/')
       data.value = res.data
       loading.value = false
     } catch (err) {

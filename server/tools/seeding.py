@@ -14,11 +14,11 @@ def seed_groups():
 
 
 def seed_yt_channels():
-    with open("tools/data/yt_channels.json") as f:
+    with open("tools/data/channels.json") as f:
         channels = json.load(f)
     for channel in channels:
         try:
-            httpx.post("http://localhost:8000/api/youtube", json=channel)
+            httpx.post("http://localhost:8000/api/channels", json=channel)
         except:
             print("Error seeding channel: ", channel)
     print("Youtube Channels seeded!")

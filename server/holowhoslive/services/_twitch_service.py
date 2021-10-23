@@ -3,21 +3,18 @@ import httpx
 from typing import List
 
 from holowhoslive.config import get_settings, Settings
-from holowhoslive.schemas import (
-    TwitchChannelImageSchema,
-    TwitchChannelSchema,
-    TwitchChannelCreateSchema,
-    TwitchChannelApiSchema,
-)
-from holowhoslive.models import TwitchChannel
+from holowhoslive.schemas import ChannelApiSchema, ChannelSchema
+from holowhoslive.models import Channel
 
 
 class TwitchService:
     def __init__(self, settings: Settings = Depends(get_settings)) -> None:
         self.settings = settings
 
-    async def get_twitch_data(self) -> List[TwitchChannelApiSchema]:
-        db_channels = await TwitchChannelSchema.from_queryset(TwitchChannel.all())
+    async def get_twitch_data(self) -> List[ChannelApiSchema]:
+        db_channels = await ChannelSchema.from_queryset(
+            Channel.filter(platform="Twitch").all()
+        )
         twitch_data = await self._get_twitch_data(db_channels)
 
         channels = []
@@ -33,11 +30,12 @@ class TwitchService:
             ]
 
             channels.append(
-                TwitchChannelApiSchema(
+                ChannelApiSchema(
                     **channel.dict(),
-                    images=TwitchChannelImageSchema(
-                        default=twitch_channel["profile_image_url"]
-                    ),
+                    # images=TwitchChannelImageSchema(
+                    #     default=twitch_channel["profile_image_url"]
+                    # ),
+                    image=twitch_channel["profile_image_url"],
                     view_count=twitch_channel["view_count"],
                     is_live=is_live,
                     display_name=twitch_channel["display_name"],
@@ -46,22 +44,6 @@ class TwitchService:
 
         return channels
 
-    async def get_all(self) -> List[TwitchChannelSchema]:
-        return await TwitchChannelSchema.from_queryset(TwitchChannel.all())
-
-    async def get(self, id) -> TwitchChannelSchema:
-        return await TwitchChannelSchema.from_queryset_single(TwitchChannel.get(id=id))
-
-    async def add(self, channel: TwitchChannelCreateSchema) -> TwitchChannelSchema:
-        db_channel = await TwitchChannel.create(**channel.dict())
-        return await TwitchChannelSchema.from_tortoise_orm(db_channel)
-
-    async def update(self, id: int, channel: TwitchChannelSchema) -> None:
-        await TwitchChannel.filter(id=id).update(**channel.dict(exclude_unset=True))
-
-    async def delete(self, id: int) -> None:
-        await TwitchChannel.filter(id=id).delete()
-
     async def _get_twitch_access_token(self) -> str:
         url = f"https://id.twitch.tv/oauth2/token?client_id={self.settings.twitch_id}&client_secret={self.settings.twitch_secret}&grant_type=client_credentials"
         print("URL: ", url)
@@ -69,7 +51,7 @@ class TwitchService:
             res = await client.post(url)
             return res.json()["access_token"]
 
-    async def _get_twitch_data(self, channels: List[TwitchChannelSchema]) -> List:
+    async def _get_twitch_data(self, channels: List[ChannelSchema]) -> List:
         access_token = await self._get_twitch_access_token()
         channel_logins = [c.channel_id for c in channels]
 
