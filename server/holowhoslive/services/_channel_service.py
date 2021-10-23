@@ -1,4 +1,3 @@
-import pprint
 import logging
 import pickle
 from typing import List
@@ -24,9 +23,7 @@ class ChannelService:
         self.log = logging.getLogger("uvicorn")
 
     async def get_all(self) -> List[ChannelSchema]:
-        channels = await ChannelSchema.from_queryset(Channel.all())
-        pprint.pprint(channels)
-        return channels
+        return await ChannelSchema.from_queryset(Channel.all())
 
     async def get(self, id: int) -> ChannelSchema:
         return await ChannelSchema.from_queryset_single(Channel.get(id=id))

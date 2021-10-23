@@ -8,6 +8,7 @@ def seed_groups():
     for group in groups:
         try:
             httpx.post("http://localhost:8000/api/groups", json=group)
+            # httpx.post("https://api.holowhos.live/api/groups", json=group)
         except:
             print("Error seeding group: ", group)
     print("Groups seeded")
@@ -19,6 +20,7 @@ def seed_yt_channels():
     for channel in channels:
         try:
             httpx.post("http://localhost:8000/api/channels", json=channel)
+            # httpx.post("https://api.holowhos.live/api/channels", json=channel)
         except:
             print("Error seeding channel: ", channel)
     print("Youtube Channels seeded!")
