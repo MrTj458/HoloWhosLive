@@ -46,7 +46,6 @@ class TwitchService:
 
     async def _get_twitch_access_token(self) -> str:
         url = f"https://id.twitch.tv/oauth2/token?client_id={self.settings.twitch_id}&client_secret={self.settings.twitch_secret}&grant_type=client_credentials"
-        print("URL: ", url)
         async with httpx.AsyncClient() as client:
             res = await client.post(url)
             return res.json()["access_token"]
