@@ -3,14 +3,14 @@ import httpx
 from typing import List
 from fastapi import Depends
 
-from holowhoslive.dependencies import get_yt_service
+from holowhoslive.config import get_settings, Settings
 from holowhoslive.models import Channel
 from holowhoslive.schemas import ChannelApiSchema, ChannelSchema
 
 
 class YoutubeService:
-    def __init__(self, yt_client=Depends(get_yt_service)):
-        self.yt_client = yt_client
+    def __init__(self, settings: Settings = Depends(get_settings)):
+        self.settings = settings
 
     async def get_youtube_data(self) -> List[ChannelApiSchema]:
         """
@@ -19,7 +19,7 @@ class YoutubeService:
         db_channels = await ChannelSchema.from_queryset(
             Channel.filter(platform="Youtube").all()
         )
-        yt_data = self._get_yt_data(db_channels)
+        yt_data = await self._get_yt_data(db_channels)
 
         # In parallel, grab all needed data and create list of channels
         channels = await asyncio.gather(
@@ -28,7 +28,7 @@ class YoutubeService:
 
         return channels
 
-    def _get_yt_data(self, channels):
+    async def _get_yt_data(self, channels):
         """Fetch channel data from the Youtube API"""
         channel_ids = [channel.channel_id for channel in channels]
 
@@ -38,10 +38,14 @@ class YoutubeService:
         channel_data = []
 
         for arr in split_ids:
-            yt_request = self.yt_client.channels().list(
-                id=arr, part="snippet,statistics"
-            )
-            channel_data = [*channel_data, *yt_request.execute()["items"]]
+            async with httpx.AsyncClient() as client:
+                res = await client.get(
+                    f"https://youtube.googleapis.com/youtube/v3/channels?key={self.settings.youtube_api_key}&part=snippet&part=statistics&id={'&id='.join(arr)}",
+                    headers={
+                        "Accept": "application/json",
+                    },
+                )
+                channel_data = [*channel_data, *res.json()["items"]]
 
         return channel_data
 
