@@ -32,4 +32,5 @@ class ChannelApiSchema(BaseModel):
     first_name: str
     last_name: str
     channel_id: str
+    platform: str
     group: GroupSchema
