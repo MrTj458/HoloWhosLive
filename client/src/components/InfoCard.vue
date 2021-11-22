@@ -56,7 +56,7 @@ a {
 img {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  width: 240px;
+  width: 100%;
 }
 
 .card {
@@ -67,6 +67,8 @@ img {
   text-decoration: none;
   transition: all 0.1s ease;
   width: 100%;
+  max-width: 240px;
+  height: 100%;
 }
 
 .card:hover {
