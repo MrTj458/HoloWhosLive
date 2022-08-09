@@ -2,6 +2,8 @@ from holowhoslive.config import get_settings
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from tortoise.contrib.fastapi import register_tortoise
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 import holowhoslive.api as routers
 
@@ -29,10 +31,11 @@ api_router.include_router(routers.channels_router)
 
 app.include_router(api_router)
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/")
 async def root():
-    return {"msg": "Holo Who's Live API", "dev": settings.dev}
+    return FileResponse('static/index.html')
 
 
 register_tortoise(

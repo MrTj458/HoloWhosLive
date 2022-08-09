@@ -1,4 +1,12 @@
-FROM python:3.9-slim
+FROM node:16-alpine as build-client
+
+WORKDIR /app
+COPY ./client/package*.json ./
+RUN npm install
+COPY ./client/ .
+RUN npm run build
+
+FROM python:3.9-slim as build-server
 
 RUN apt update \
   && apt upgrade -y \
@@ -6,7 +14,7 @@ RUN apt update \
 
 WORKDIR /app
 
-COPY pyproject.toml poetry.lock /app/
+COPY ./server/pyproject.toml ./server/poetry.lock /app/
 
 RUN pip install --no-cache-dir --upgrade pip \
   && pip install poetry
@@ -14,7 +22,8 @@ RUN pip install --no-cache-dir --upgrade pip \
 RUN  poetry config virtualenvs.create false \
   && poetry install --no-dev --no-interaction --no-ansi
 
-COPY . .
+COPY ./server .
 
-# CMD ["uvicorn", "holowhoslive.main:app", "--host", "0.0.0.0", "--port", "80"]
+COPY --from=build-client /app/dist/ ./static/
+
 CMD uvicorn holowhoslive.main:app --host 0.0.0.0 --port $PORT
