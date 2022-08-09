@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import api from '../utils/axios'
+import axios from 'axios'
 
 const getGroups = () => {
   const data = ref(null)
@@ -11,7 +11,7 @@ const getGroups = () => {
     loading.value = true
 
     try {
-      const res = await api.get('/api/groups/')
+      const res = await axios.get('/api/groups/')
       data.value = res.data
       loading.value = false
     } catch (err) {

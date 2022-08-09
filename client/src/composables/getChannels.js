@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import api from '../utils/axios'
+import axios from 'axios'
 
 const getChannels = () => {
   const data = ref(null)
@@ -11,7 +11,7 @@ const getChannels = () => {
     loading.value = true
 
     try {
-      const res = await api.get('/api/channels/')
+      const res = await axios.get('/api/channels/')
       data.value = res.data
       loading.value = false
     } catch (err) {

@@ -24,6 +24,6 @@ RUN  poetry config virtualenvs.create false \
 
 COPY ./server .
 
-COPY --from=build-client /app/dist/ ./static/
+COPY --from=build-client /app/dist/ ./app/
 
 CMD uvicorn holowhoslive.main:app --host 0.0.0.0 --port $PORT
